@@ -211,6 +211,21 @@ header{height:72px;position:absolute;z-index:20;width:100%;display:flex;align-it
   footer .wrap{gap:16px;flex-direction:column;text-align:center}
 }
 
+/* Registration form — "Quero garantir minha vaga" opens this instead of
+   going nowhere; captures who she is before sending her to pay. */
+.reg-form{max-width:420px;margin:28px auto 0;text-align:left}
+.reg-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.reg-field{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.18);color:var(--cream);padding:12px 14px;font-size:13px;font-family:Montserrat,Arial,sans-serif;margin-bottom:10px;border-radius:2px}
+.reg-field::placeholder{color:rgba(241,234,223,.4)}
+.reg-field:focus{outline:none;border-color:var(--gold)}
+.reg-hint{font-size:10px;color:var(--muted);margin:-2px 0 10px;letter-spacing:.04em}
+.reg-error{color:#e59a86;font-size:11px;margin-top:10px;display:none}
+.reg-error.show{display:block}
+.reg-success{display:none;text-align:center}
+.reg-success.show{display:block}
+.reg-success p{color:var(--muted)}
+#vaga-btn[disabled]{opacity:.6;cursor:default}
+
 </style></head><body>
 <header><div class="wrap nav"><div class="brand">PERSEA</div><nav class="links"><a href="#experiencia">Experiência</a><a href="#sobre">Sobre</a><a href="#evento">O evento</a><a class="btn" href="#vaga">Garantir minha vaga</a></nav></div></header>
 <section class="hero"><div class="wrap"><div class="hero-copy"><div class="eyebrow">PERSEA EXPERIENCE</div><h1 class="serif">Você está convidada<br>a uma <em>nova<br>percepção.</em></h1><div class="rule"></div><div class="micro">Competência existe.<br>A percepção dela transforma.</div></div></div><div class="hero-side">Estratégia<br>Imagem<br>Comunicação<br>Vendas<br><br>Uma nova<br>percepção de você</div></section>
@@ -219,6 +234,96 @@ header{height:72px;position:absolute;z-index:20;width:100%;display:flex;align-it
 <section class="split value"><div class="visual crystal blend-right-dark"></div><div class="value-copy"><div class="eyebrow">O que muda</div><h2>O que muda quando<br>o seu valor fica claro?</h2><div class="compare"><div class="box"><strong>ANTES</strong><span>confusa · genérica · insegura · subvalorizada · difícil de explicar · difícil de vender</span></div><div class="box"><strong>DEPOIS</strong><span>segura · clara · bem posicionada · admirada · valorizada · capaz de sustentar seu preço</span></div></div><div class="gold-italic">Você não precisa parecer maior do que é.<br>Precisa fazer o mercado enxergar o tamanho que você já tem.</div></div></section>
 <section id="evento" class="pillars"><div class="pillars-left"><div class="eyebrow">A estrutura</div><h2>Um dia. Quatro pilares.<br>Uma nova percepção.</h2><p>O PERSEA EXPERIENCE trabalha quatro pilares que precisam conversar entre si.</p><a class="btn" href="#pilares">Conheça os pilares</a></div><div id="pilares" class="pillar-list"><div class="pillar"><b>01 · POSICIONAMENTO</b><div>Quem você é no mercado?<br>O que você faz de diferente?<br>Por que alguém deveria escolher você?</div></div><div class="pillar"><b>02 · IMAGEM</b><div>Antes de você explicar o que faz, as pessoas já criaram uma impressão sobre você.</div></div><div class="pillar"><b>03 · COMUNICAÇÃO</b><div>Como você se expressa e se conecta.</div></div><div class="pillar"><b>04 · VENDAS</b><div>Como sustentar o seu preço e atrair os clientes certos.</div></div></div></section>
 <section id="sobre" class="about"><div class="about-img"></div><div class="about-copy"><div class="eyebrow">Quem está por trás</div><h2>Quem é Nayana Murta?</h2><p>Nayana Murta é engenheira de formação, estrategista de imagem e marca pessoal e especialista em conectar competência, percepção e posicionamento. Sua trajetória transita entre negócios, engenharia e resultados, e o universo da imagem, comunicação e percepção.</p><p>Foi justamente nesse encontro que nasceu o PERSEA: uma metodologia criada a partir de uma pergunta. Por que profissionais extremamente competentes continuam sendo percebidas como comuns?</p><blockquote>Imagem não é sobre parecer alguma coisa.<br>É sobre comunicar, com inteligência, o valor que já existe.</blockquote></div></section>
-<section id="vaga" class="cta"><div class="wrap"><div class="eyebrow">Lote 1 · sujeito à disponibilidade</div><h2>Seu próximo nível de percepção<br>começa aqui.</h2><div class="micro">PERSEA EXPERIENCE · Belo Horizonte · 08h às 18h · Experiência presencial</div><div class="price">R$ 997,00</div><div class="install">12 x sem juros</div><a class="btn" href="#">Quero garantir minha vaga</a></div></section>
+<section id="vaga" class="cta"><div class="wrap"><div class="eyebrow">Lote 1 · sujeito à disponibilidade</div><h2>Seu próximo nível de percepção<br>começa aqui.</h2><div class="micro">PERSEA EXPERIENCE · Belo Horizonte · 08h às 18h · Experiência presencial</div><div class="price">R$ 997,00</div><div class="install">12 x sem juros</div>
+  <form id="vaga-form" class="reg-form">
+    <input class="reg-field" type="text" name="name" placeholder="Nome completo" required />
+    <div class="reg-row">
+      <input class="reg-field" type="email" name="email" placeholder="E-mail" required />
+      <input class="reg-field" type="tel" name="whatsapp" placeholder="WhatsApp" required />
+    </div>
+    <div class="reg-row">
+      <input class="reg-field" type="number" min="1" max="120" name="age" placeholder="Idade" required />
+      <input class="reg-field" type="text" name="instagram" placeholder="@ do Instagram" />
+    </div>
+    <input class="reg-field" type="text" name="linkedin" placeholder="Perfil do LinkedIn (opcional)" />
+    <p class="reg-hint">Preencha pelo menos um: Instagram ou LinkedIn.</p>
+    <button type="submit" id="vaga-btn" class="btn" style="width:100%;border:none;cursor:pointer;">Quero garantir minha vaga</button>
+    <p class="reg-error" id="vaga-error"></p>
+  </form>
+  <div class="reg-success" id="vaga-success">
+    <p class="serif" style="font-size:22px;color:var(--cream);margin-bottom:8px;" id="vaga-success-title">Sua vaga já está garantida ✦</p>
+    <p id="vaga-success-body">Encontramos um pagamento confirmado para este e-mail. Nossa equipe vai falar com você em breve com os próximos passos.</p>
+  </div>
+</div></section>
 <footer><div class="wrap"><div class="brand">PERSEA <span style="font-size:9px;color:#b89657">EXPERIENCE</span></div><div class="footer-note">Competência existe. A percepção dela transforma.</div></div></footer>
+<script>
+// Sends the registration to the same Supabase project PERSEA OS runs on —
+// a public, unauthenticated Edge Function (event-registration-create)
+// creates the real event_registrations row + a real SumUp checkout, and
+// this redirects straight to that checkout. The table stays staff-only
+// RLS; this endpoint is the one narrow, validated door into it from here.
+(function () {
+  const EVENT_ENDPOINT = 'https://bletlyuptkppacjcbcvw.supabase.co/functions/v1/event-registration-create';
+  const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_37D7JJzhUDCUwtHtYA4gjw_jiSXDMxu';
+  const form = document.getElementById('vaga-form');
+  const btn = document.getElementById('vaga-btn');
+  const errorEl = document.getElementById('vaga-error');
+
+  // Landing back here after SumUp's hosted checkout (return_url) — the
+  // real confirmation is the webhook updating the database, this is just
+  // making sure she doesn't land back on the empty form looking unpaid.
+  if (new URLSearchParams(location.search).get('obrigada') === '1') {
+    form.style.display = 'none';
+    document.getElementById('vaga-success-title').textContent = 'Vaga garantida ✦';
+    document.getElementById('vaga-success-body').textContent = 'Recebemos seu pagamento. Nossa equipe vai te enviar todos os detalhes do dia em breve — te vemos lá!';
+    document.getElementById('vaga-success').classList.add('show');
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorEl.classList.remove('show');
+    const fd = new FormData(form);
+    const instagram = fd.get('instagram').trim();
+    const linkedin = fd.get('linkedin').trim();
+    if (!instagram && !linkedin) {
+      errorEl.textContent = 'Informe seu Instagram ou LinkedIn.';
+      errorEl.classList.add('show');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Processando…';
+    try {
+      const res = await fetch(EVENT_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', apikey: SUPABASE_PUBLISHABLE_KEY },
+        body: JSON.stringify({
+          event_slug: 'persea-experience',
+          name: fd.get('name'),
+          email: fd.get('email'),
+          whatsapp: fd.get('whatsapp'),
+          age: fd.get('age'),
+          instagram,
+          linkedin,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || data.error) throw new Error(data.error || 'Não foi possível processar sua inscrição agora.');
+
+      if (data.already_paid) {
+        form.style.display = 'none';
+        document.getElementById('vaga-success').classList.add('show');
+        return;
+      }
+
+      location.href = data.hosted_url;
+    } catch (err) {
+      errorEl.textContent = err.message || 'Não foi possível processar sua inscrição agora. Tente novamente em instantes.';
+      errorEl.classList.add('show');
+      btn.disabled = false;
+      btn.textContent = 'Quero garantir minha vaga';
+    }
+  });
+})();
+</script>
 </body></html>
