@@ -30,7 +30,7 @@ h1 em{color:var(--gold-soft)}
 .error{color:#e59a86;font-size:12px;margin-top:14px;text-align:center;min-height:1em}
 .done{text-align:center;padding-top:20px}
 .done p{color:var(--muted);line-height:1.7;font-size:14px}
-.done .again{background:none;border:0;color:var(--gold);text-decoration:underline;text-underline-offset:3px;font:inherit;font-size:12px;cursor:pointer;margin-top:10px}
+.done .again,.nudge .again{background:none;border:0;color:var(--gold);text-decoration:underline;text-underline-offset:3px;font:inherit;font-size:12px;cursor:pointer;margin-top:10px}
 .note{font-size:11px;color:var(--muted);text-align:center;margin-top:18px}
 .photos{margin-top:34px;padding:26px 22px;border:1px solid var(--line);border-radius:6px;background:linear-gradient(180deg,rgba(199,161,91,.08),rgba(199,161,91,.02))}
 .photos>h2{font:400 28px/1.15 'Cormorant Garamond',Georgia,serif;margin:0 0 8px}.photos>h2 em{color:var(--gold-soft)}
@@ -47,7 +47,7 @@ h1 em{color:var(--gold-soft)}
 .add input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
 .add.busy{opacity:.6;pointer-events:none}
 .ph-err{color:#e59a86;font-size:11px;margin:8px 0 0;min-height:1em}
-.nudge{margin:26px auto 0;max-width:420px;padding:16px;border:1px solid var(--line);border-radius:6px;font-size:13px;color:var(--muted)}
+.nudge{margin:26px auto 0;max-width:420px;padding:16px;text-align:center;border:1px solid var(--line);border-radius:6px;font-size:13px;color:var(--muted)}
 </style></head><body>
 <main class="wrap">
   <p class="brand">PERSEA</p>
@@ -144,7 +144,7 @@ h1 em{color:var(--gold-soft)}
     <section class="photos" id="photos">
       <h2>Fotos para um <em>momento especial</em> do dia</h2>
       <p>Estamos preparando uma dinâmica muito especial, e ela fica ainda mais bonita com as suas fotos. Não é obrigatório, mas faz toda a diferença para nós.</p>
-      <p>As fotos serão impressas, então envie na melhor qualidade que conseguir. Cada foto é salva assim que você escolhe, e você pode voltar a este link depois para adicionar mais.</p>
+      <p>As fotos serão impressas, então envie na melhor qualidade que conseguir.</p>
 
       <div class="ph-group" data-kind="child" data-max="3">
         <h3>Uma foto sua de criança</h3>
@@ -161,6 +161,13 @@ h1 em{color:var(--gold-soft)}
       </div>
     </section>
 
+    <div class="nudge" id="no-photo" hidden>
+      Você ainda não adicionou <b style="color:var(--cream)">sua foto de criança</b>. Ela é muito importante para a dinâmica do dia, e depois de enviar não será possível adicionar.
+      <div style="display:flex;gap:16px;justify-content:center;margin-top:12px;flex-wrap:wrap;">
+        <button type="button" class="again" id="go-photos">Adicionar agora</button>
+        <button type="button" class="again" id="send-anyway" style="color:var(--muted);">Enviar sem foto</button>
+      </div>
+    </div>
     <button type="submit" class="submit" id="submit">Enviar</button>
     <p class="error" id="error" role="alert"></p>
   </form>
@@ -169,8 +176,6 @@ h1 em{color:var(--gold-soft)}
     <p class="eyebrow">Tudo pronto</p>
     <h1>Obrigada, <em id="done-name">querida</em>.</h1>
     <p>Suas respostas chegaram para a Nay. Nos vemos no dia 24 de outubro, em Belo Horizonte.</p>
-    <div class="nudge" id="photo-nudge" hidden>Ainda dá tempo de enviar <b style="color:var(--cream)">sua foto de criança</b> e as fotos das pessoas especiais para a dinâmica do dia.<br><button type="button" class="again" id="add-photos">Adicionar fotos</button></div>
-    <button type="button" class="again" id="again">Revisar minhas respostas</button>
   </div>
 </main>
 
@@ -225,7 +230,6 @@ h1 em{color:var(--gold-soft)}
       + (photos[kind].length < max ? `<label class="add"><span>+</span>Adicionar foto<input type="file" accept="image/*"></label>` : '');
     g.querySelector('input[type=file]')?.addEventListener('change', (e) => { const f = e.target.files[0]; if (f) upload(kind, f, g); });
     g.querySelectorAll('[data-rm]').forEach((b) => b.addEventListener('click', () => removePhoto(kind, b.dataset.rm, g)));
-    $('photo-nudge').hidden = photos.child.length > 0;
   }
   async function upload(kind, file, g) {
     const errEl = g.querySelector('.ph-err'); errEl.textContent = '';
@@ -277,8 +281,10 @@ h1 em{color:var(--gold-soft)}
     } catch { show('invalid'); }
   }
 
-  $('again').addEventListener('click', () => show('prep'));
-  $('add-photos').addEventListener('click', () => { show('prep'); $('photos').scrollIntoView({ behavior: 'smooth' }); });
+
+  let sendWithoutPhoto = false;
+  $('go-photos').addEventListener('click', () => { $('no-photo').hidden = true; $('photos').scrollIntoView({ behavior: 'smooth' }); });
+  $('send-anyway').addEventListener('click', () => { sendWithoutPhoto = true; $('no-photo').hidden = true; $('prep').requestSubmit(); });
   $('prep').addEventListener('submit', async (e) => {
     e.preventDefault();
     const err = $('error'); err.textContent = '';
@@ -299,6 +305,8 @@ h1 em{color:var(--gold-soft)}
     if (answers.accessibility.includes('Outra') && !answers.accessibility_note.trim()) return (err.textContent = 'Conte qual é a sua necessidade de acessibilidade.');
     if (!answers.revenue_current) return (err.textContent = 'Escolha seu faturamento atual.');
     if (!answers.revenue_goal) return (err.textContent = 'Escolha sua meta de faturamento.');
+    // Last chance for the childhood photo: ask once, then let her send anyway.
+    if (!photos.child.length && !sendWithoutPhoto) { $('no-photo').hidden = false; $('no-photo').scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
     const btn = $('submit'); btn.disabled = true; btn.textContent = 'Enviando…';
     try {
       const { ok, d } = await call({ action: 'submit', answers });
