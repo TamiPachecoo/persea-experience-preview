@@ -45,7 +45,7 @@ h1 em{color:var(--gold-soft)}
   <form id="prep" hidden novalidate>
     <p class="eyebrow">PERSEA Experience · 24 de outubro</p>
     <h1><span id="hello">Que bom ter você</span>, <em>vamos preparar o seu dia.</em></h1>
-    <p class="lede">São 5 perguntas rápidas, quase todas de toque. Elas ajudam a Nay a preparar uma experiência pensada para você.</p>
+    <p class="lede">São 6 perguntas rápidas, quase todas de toque. Com elas, adaptamos o espaço, o cardápio e o conteúdo do dia para receber você com todo o cuidado, incluindo alergias, restrições e necessidades de acessibilidade.</p>
 
     <section class="q">
       <h2>O que você mais espera viver neste dia?</h2>
@@ -84,6 +84,22 @@ h1 em{color:var(--gold-soft)}
         <button type="button" class="chip" aria-pressed="false">Sim, tenho</button>
       </div>
       <input class="field" id="allergy-note" maxlength="300" placeholder="Quais? (alimentos, flores, perfumes…)" hidden />
+    </section>
+
+    <section class="q">
+      <h2>Você tem alguma necessidade de acessibilidade?</h2>
+      <p class="help">Assim preparamos o espaço para você. Pode marcar mais de uma.</p>
+      <div class="chips" data-group="accessibility" data-exclusive="Não preciso">
+        <button type="button" class="chip" aria-pressed="false">Não preciso</button>
+        <button type="button" class="chip" aria-pressed="false">Cadeira de rodas ou mobilidade reduzida</button>
+        <button type="button" class="chip" aria-pressed="false">Acesso sem escadas</button>
+        <button type="button" class="chip" aria-pressed="false">Assento com apoio ou mais conforto</button>
+        <button type="button" class="chip" aria-pressed="false">Deficiência auditiva</button>
+        <button type="button" class="chip" aria-pressed="false">Deficiência visual</button>
+        <button type="button" class="chip" aria-pressed="false">Gestante</button>
+        <button type="button" class="chip" aria-pressed="false">Outra</button>
+      </div>
+      <input class="field" id="accessibility-note" maxlength="300" placeholder="Conte o que podemos preparar para você." hidden />
     </section>
 
     <section class="q">
@@ -156,6 +172,7 @@ h1 em{color:var(--gold-soft)}
   function sync() {
     $('food-note').hidden = !selected('food').includes('Outra');
     $('allergy-note').hidden = !selected('allergy').includes('Sim, tenho');
+    $('accessibility-note').hidden = !selected('accessibility').includes('Outra');
   }
 
   function show(id) { ['loading', 'invalid', 'prep', 'done'].forEach((x) => { $(x).hidden = x !== id; }); window.scrollTo(0, 0); }
@@ -172,6 +189,7 @@ h1 em{color:var(--gold-soft)}
       $('expectations-note').value = a.expectations_note; $('food-note').value = a.food_note;
       if (d.submitted) press('allergy', [a.allergies ? 'Sim, tenho' : 'Não tenho']);
       $('allergy-note').value = a.allergies;
+      press('accessibility', a.accessibility || []); $('accessibility-note').value = a.accessibility_note || '';
       press('revenue_current', [a.revenue_current]); press('revenue_goal', [a.revenue_goal]);
       sync();
       show(d.submitted ? 'done' : 'prep');
@@ -187,6 +205,7 @@ h1 em{color:var(--gold-soft)}
       expectations: selected('expectations'), expectations_note: $('expectations-note').value,
       food: selected('food'), food_note: $('food-note').value,
       allergies: allergy === 'Sim, tenho' ? $('allergy-note').value.trim() : '',
+      accessibility: selected('accessibility'), accessibility_note: $('accessibility-note').value,
       revenue_current: selected('revenue_current')[0] || '', revenue_goal: selected('revenue_goal')[0] || '',
     };
     if (!answers.expectations.length) return (err.textContent = 'Escolha pelo menos uma expectativa.');
@@ -194,6 +213,8 @@ h1 em{color:var(--gold-soft)}
     if (answers.food.includes('Outra') && !answers.food_note.trim()) return (err.textContent = 'Conte qual é a sua restrição alimentar.');
     if (!allergy) return (err.textContent = 'Responda sobre alergias.');
     if (allergy === 'Sim, tenho' && !answers.allergies) return (err.textContent = 'Conte quais são as suas alergias.');
+    if (!answers.accessibility.length) return (err.textContent = 'Responda sobre acessibilidade.');
+    if (answers.accessibility.includes('Outra') && !answers.accessibility_note.trim()) return (err.textContent = 'Conte qual é a sua necessidade de acessibilidade.');
     if (!answers.revenue_current) return (err.textContent = 'Escolha seu faturamento atual.');
     if (!answers.revenue_goal) return (err.textContent = 'Escolha sua meta de faturamento.');
     const btn = $('submit'); btn.disabled = true; btn.textContent = 'Enviando…';
