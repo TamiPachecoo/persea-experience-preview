@@ -1,0 +1,212 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Preparação · PERSEA Experience</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0b0908;--cream:#f1eadf;--gold:#c7a15b;--gold-soft:#e2c58c;--muted:#bcb2a8;--line:rgba(199,161,91,.35);--hair:rgba(241,234,223,.14)}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at top,#1c130c 0%,var(--ink) 60%) fixed,var(--ink);color:var(--cream);font-family:Montserrat,Arial,sans-serif;min-height:100vh}
+.wrap{max-width:620px;margin:0 auto;padding:56px 20px 80px}
+.brand{font:500 22px 'Cormorant Garamond',Georgia,serif;letter-spacing:.28em;text-align:center;margin:0 0 40px}
+.eyebrow{font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);font-weight:600;margin:0 0 14px;text-align:center}
+h1{font:400 clamp(36px,7vw,50px)/1 'Cormorant Garamond',Georgia,serif;text-align:center;margin:0 0 16px;text-wrap:balance}
+h1 em{color:var(--gold-soft)}
+.lede{text-align:center;color:var(--muted);font-size:14px;line-height:1.7;max-width:46ch;margin:0 auto 44px}
+.q{border-top:1px solid var(--hair);padding:30px 0 6px}
+.q h2{font:400 26px/1.15 'Cormorant Garamond',Georgia,serif;margin:0 0 6px}
+.q .help{font-size:11px;color:var(--muted);margin:0 0 16px;letter-spacing:.03em}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid rgba(241,234,223,.25);background:rgba(255,255,255,.03);color:var(--cream);border-radius:999px;padding:10px 16px;font:500 12.5px Montserrat,Arial,sans-serif;cursor:pointer;transition:border-color .2s,background .2s,color .2s}
+.chip:hover{border-color:var(--gold)}
+.chip[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#16100a}
+.chip:focus-visible,.field:focus-visible,.submit:focus-visible{outline:1px solid var(--gold-soft);outline-offset:3px}
+.stack{display:flex;flex-direction:column;gap:8px}
+.stack .chip{border-radius:4px;text-align:left;padding:13px 16px}
+.field{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(241,234,223,.2);color:var(--cream);padding:12px 14px;font:13px Montserrat,Arial,sans-serif;border-radius:2px;margin-top:12px;resize:vertical}
+.field::placeholder{color:rgba(241,234,223,.4)}
+.field:focus{outline:none;border-color:var(--gold)}
+[hidden]{display:none!important}
+.submit{display:block;width:100%;margin-top:36px;background:#d5b46d;color:#16100a;border:0;padding:17px;font:600 11px Montserrat,Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;border-radius:2px}
+.submit[disabled]{opacity:.6;cursor:default}
+.error{color:#e59a86;font-size:12px;margin-top:14px;text-align:center;min-height:1em}
+.done{text-align:center;padding-top:20px}
+.done p{color:var(--muted);line-height:1.7;font-size:14px}
+.done .again{background:none;border:0;color:var(--gold);text-decoration:underline;text-underline-offset:3px;font:inherit;font-size:12px;cursor:pointer;margin-top:10px}
+.note{font-size:11px;color:var(--muted);text-align:center;margin-top:18px}
+</style></head><body>
+<main class="wrap">
+  <p class="brand">PERSEA</p>
+
+  <div id="loading"><p class="lede">Carregando…</p></div>
+  <div id="invalid" hidden>
+    <h1>Link <em>inválido</em></h1>
+    <p class="lede">Este link de preparação não foi encontrado. Fale com a equipe da Nay pelo WhatsApp para receber o seu.</p>
+  </div>
+
+  <form id="prep" hidden novalidate>
+    <p class="eyebrow">PERSEA Experience · 24 de outubro</p>
+    <h1><span id="hello">Que bom ter você</span>, <em>vamos preparar o seu dia.</em></h1>
+    <p class="lede">São 5 perguntas rápidas, quase todas de toque. Elas ajudam a Nay a preparar uma experiência pensada para você.</p>
+
+    <section class="q">
+      <h2>O que você mais espera viver neste dia?</h2>
+      <p class="help">Escolha até 3.</p>
+      <div class="chips" data-group="expectations" data-max="3">
+        <button type="button" class="chip" aria-pressed="false">Clareza sobre o meu posicionamento</button>
+        <button type="button" class="chip" aria-pressed="false">Elevar minha imagem e presença</button>
+        <button type="button" class="chip" aria-pressed="false">Comunicar meu valor com segurança</button>
+        <button type="button" class="chip" aria-pressed="false">Ser mais reconhecida no meu mercado</button>
+        <button type="button" class="chip" aria-pressed="false">Vender e precificar melhor</button>
+        <button type="button" class="chip" aria-pressed="false">Conexões com outras profissionais</button>
+        <button type="button" class="chip" aria-pressed="false">Viver uma experiência inspiradora</button>
+      </div>
+      <textarea class="field" id="expectations-note" rows="2" maxlength="600" placeholder="Quer contar mais alguma coisa? (opcional)"></textarea>
+    </section>
+
+    <section class="q">
+      <h2>Você tem alguma restrição alimentar?</h2>
+      <p class="help">Pode marcar mais de uma.</p>
+      <div class="chips" data-group="food" data-exclusive="Nenhuma">
+        <button type="button" class="chip" aria-pressed="false">Nenhuma</button>
+        <button type="button" class="chip" aria-pressed="false">Vegetariana</button>
+        <button type="button" class="chip" aria-pressed="false">Vegana</button>
+        <button type="button" class="chip" aria-pressed="false">Sem glúten</button>
+        <button type="button" class="chip" aria-pressed="false">Sem lactose</button>
+        <button type="button" class="chip" aria-pressed="false">Low carb</button>
+        <button type="button" class="chip" aria-pressed="false">Outra</button>
+      </div>
+      <input class="field" id="food-note" maxlength="300" placeholder="Qual? Conte para a gente." hidden />
+    </section>
+
+    <section class="q">
+      <h2>E alguma alergia?</h2>
+      <div class="chips" data-group="allergy" data-single>
+        <button type="button" class="chip" aria-pressed="false">Não tenho</button>
+        <button type="button" class="chip" aria-pressed="false">Sim, tenho</button>
+      </div>
+      <input class="field" id="allergy-note" maxlength="300" placeholder="Quais? (alimentos, flores, perfumes…)" hidden />
+    </section>
+
+    <section class="q">
+      <h2>Qual é o seu faturamento médio mensal hoje?</h2>
+      <p class="help">Fica só entre você e a Nay.</p>
+      <div class="stack" data-group="revenue_current" data-single>
+        <button type="button" class="chip" aria-pressed="false">Até R$ 5 mil</button>
+        <button type="button" class="chip" aria-pressed="false">R$ 5 mil a R$ 10 mil</button>
+        <button type="button" class="chip" aria-pressed="false">R$ 10 mil a R$ 20 mil</button>
+        <button type="button" class="chip" aria-pressed="false">R$ 20 mil a R$ 50 mil</button>
+        <button type="button" class="chip" aria-pressed="false">Acima de R$ 50 mil</button>
+      </div>
+    </section>
+
+    <section class="q">
+      <h2>E quanto você quer faturar por mês daqui a 12 meses?</h2>
+      <div class="stack" data-group="revenue_goal" data-single>
+        <button type="button" class="chip" aria-pressed="false">Até R$ 10 mil</button>
+        <button type="button" class="chip" aria-pressed="false">R$ 10 mil a R$ 20 mil</button>
+        <button type="button" class="chip" aria-pressed="false">R$ 20 mil a R$ 50 mil</button>
+        <button type="button" class="chip" aria-pressed="false">R$ 50 mil a R$ 100 mil</button>
+        <button type="button" class="chip" aria-pressed="false">Acima de R$ 100 mil</button>
+      </div>
+    </section>
+
+    <button type="submit" class="submit" id="submit">Enviar</button>
+    <p class="error" id="error" role="alert"></p>
+  </form>
+
+  <div class="done" id="done" hidden>
+    <p class="eyebrow">Tudo pronto</p>
+    <h1>Obrigada, <em id="done-name">querida</em>.</h1>
+    <p>Suas respostas chegaram para a Nay. Nos vemos no dia 24 de outubro, em Belo Horizonte.</p>
+    <button type="button" class="again" id="again">Revisar minhas respostas</button>
+  </div>
+</main>
+
+<script>
+(function () {
+  const ENDPOINT = 'https://bletlyuptkppacjcbcvw.supabase.co/functions/v1/event-prep';
+  const KEY = 'sb_publishable_37D7JJzhUDCUwtHtYA4gjw_jiSXDMxu';
+  const token = new URLSearchParams(location.search).get('t') || '';
+  const $ = (id) => document.getElementById(id);
+  const call = (body) => fetch(ENDPOINT, {
+    method: 'POST', headers: { 'Content-Type': 'application/json', apikey: KEY },
+    body: JSON.stringify({ token, ...body }),
+  }).then((r) => r.json().then((d) => ({ ok: r.ok, d })));
+
+  // chip groups: multi (optional max), single, or multi with an exclusive "Nenhuma"
+  const groups = {};
+  document.querySelectorAll('[data-group]').forEach((g) => {
+    const name = g.dataset.group, single = g.hasAttribute('data-single');
+    const max = Number(g.dataset.max) || Infinity, exclusive = g.dataset.exclusive;
+    const chips = [...g.querySelectorAll('.chip')];
+    groups[name] = chips;
+    chips.forEach((c) => c.addEventListener('click', () => {
+      const on = c.getAttribute('aria-pressed') === 'true';
+      if (single) chips.forEach((x) => x.setAttribute('aria-pressed', 'false'));
+      if (!on && !single) {
+        if (exclusive && c.textContent === exclusive) chips.forEach((x) => x.setAttribute('aria-pressed', 'false'));
+        if (exclusive && c.textContent !== exclusive) chips.forEach((x) => { if (x.textContent === exclusive) x.setAttribute('aria-pressed', 'false'); });
+        if (selected(name).length >= max) return;
+      }
+      c.setAttribute('aria-pressed', single ? 'true' : String(!on));
+      sync();
+    }));
+  });
+  const selected = (name) => groups[name].filter((c) => c.getAttribute('aria-pressed') === 'true').map((c) => c.textContent);
+  const press = (name, values) => groups[name].forEach((c) => c.setAttribute('aria-pressed', String(values.includes(c.textContent))));
+  function sync() {
+    $('food-note').hidden = !selected('food').includes('Outra');
+    $('allergy-note').hidden = !selected('allergy').includes('Sim, tenho');
+  }
+
+  function show(id) { ['loading', 'invalid', 'prep', 'done'].forEach((x) => { $(x).hidden = x !== id; }); window.scrollTo(0, 0); }
+
+  async function load() {
+    if (!/^[0-9a-f-]{36}$/i.test(token)) return show('invalid');
+    try {
+      const { ok, d } = await call({ action: 'get' });
+      if (!ok || d.error) return show('invalid');
+      $('hello').textContent = d.first_name ? `${d.first_name}, que bom ter você` : 'Que bom ter você';
+      $('done-name').textContent = d.first_name || 'querida';
+      const a = d.answers;
+      press('expectations', a.expectations); press('food', a.food);
+      $('expectations-note').value = a.expectations_note; $('food-note').value = a.food_note;
+      if (d.submitted) press('allergy', [a.allergies ? 'Sim, tenho' : 'Não tenho']);
+      $('allergy-note').value = a.allergies;
+      press('revenue_current', [a.revenue_current]); press('revenue_goal', [a.revenue_goal]);
+      sync();
+      show(d.submitted ? 'done' : 'prep');
+    } catch { show('invalid'); }
+  }
+
+  $('again').addEventListener('click', () => show('prep'));
+  $('prep').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const err = $('error'); err.textContent = '';
+    const allergy = selected('allergy')[0];
+    const answers = {
+      expectations: selected('expectations'), expectations_note: $('expectations-note').value,
+      food: selected('food'), food_note: $('food-note').value,
+      allergies: allergy === 'Sim, tenho' ? $('allergy-note').value.trim() : '',
+      revenue_current: selected('revenue_current')[0] || '', revenue_goal: selected('revenue_goal')[0] || '',
+    };
+    if (!answers.expectations.length) return (err.textContent = 'Escolha pelo menos uma expectativa.');
+    if (!answers.food.length) return (err.textContent = 'Responda sobre restrições alimentares.');
+    if (answers.food.includes('Outra') && !answers.food_note.trim()) return (err.textContent = 'Conte qual é a sua restrição alimentar.');
+    if (!allergy) return (err.textContent = 'Responda sobre alergias.');
+    if (allergy === 'Sim, tenho' && !answers.allergies) return (err.textContent = 'Conte quais são as suas alergias.');
+    if (!answers.revenue_current) return (err.textContent = 'Escolha seu faturamento atual.');
+    if (!answers.revenue_goal) return (err.textContent = 'Escolha sua meta de faturamento.');
+    const btn = $('submit'); btn.disabled = true; btn.textContent = 'Enviando…';
+    try {
+      const { ok, d } = await call({ action: 'submit', answers });
+      if (!ok || d.error) throw new Error(d.error);
+      show('done');
+    } catch (x) {
+      err.textContent = x.message || 'Não foi possível enviar agora. Tente de novo em instantes.';
+    } finally { btn.disabled = false; btn.textContent = 'Enviar'; }
+  });
+
+  load();
+})();
+</script>
+</body></html>
