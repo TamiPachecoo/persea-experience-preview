@@ -32,6 +32,22 @@ h1 em{color:var(--gold-soft)}
 .done p{color:var(--muted);line-height:1.7;font-size:14px}
 .done .again{background:none;border:0;color:var(--gold);text-decoration:underline;text-underline-offset:3px;font:inherit;font-size:12px;cursor:pointer;margin-top:10px}
 .note{font-size:11px;color:var(--muted);text-align:center;margin-top:18px}
+.photos{margin-top:34px;padding:26px 22px;border:1px solid var(--line);border-radius:6px;background:linear-gradient(180deg,rgba(199,161,91,.08),rgba(199,161,91,.02))}
+.photos>h2{font:400 28px/1.15 'Cormorant Garamond',Georgia,serif;margin:0 0 8px}.photos>h2 em{color:var(--gold-soft)}
+.photos>p{font-size:13px;line-height:1.65;color:var(--muted);margin:0 0 6px}
+.ph-group{margin-top:24px}.ph-group h3{font:500 12px Montserrat,Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--cream);margin:0 0 4px}
+.ph-group .help{font-size:11px;color:var(--muted);margin:0 0 12px}
+.ph-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}
+.ph{position:relative;aspect-ratio:1;border-radius:4px;overflow:hidden;background:rgba(255,255,255,.05);border:1px solid var(--hair)}
+.ph img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover;display:block}
+.ph .ph-fallback{position:absolute;inset:0;display:grid;place-items:center;font-size:10px;color:var(--muted);text-align:center;padding:6px}
+.ph .rm{z-index:2;position:absolute;top:4px;right:4px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(0,0,0,.65);color:var(--cream);font-size:13px;line-height:22px;cursor:pointer}
+.add{aspect-ratio:1;border:1px dashed rgba(199,161,91,.6);border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;color:var(--gold-soft);font-size:11px;letter-spacing:.06em;text-align:center;padding:6px;transition:background .2s}
+.add:hover{background:rgba(199,161,91,.08)}.add span{font-size:22px;line-height:1}
+.add input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.add.busy{opacity:.6;pointer-events:none}
+.ph-err{color:#e59a86;font-size:11px;margin:8px 0 0;min-height:1em}
+.nudge{margin:26px auto 0;max-width:420px;padding:16px;border:1px solid var(--line);border-radius:6px;font-size:13px;color:var(--muted)}
 </style></head><body>
 <main class="wrap">
   <p class="brand">PERSEA</p>
@@ -45,7 +61,7 @@ h1 em{color:var(--gold-soft)}
   <form id="prep" hidden novalidate>
     <p class="eyebrow">PERSEA Experience · 24 de outubro</p>
     <h1><span id="hello">Que bom ter você</span>, <em>vamos preparar o seu dia.</em></h1>
-    <p class="lede">São 6 perguntas rápidas, quase todas de toque. Com elas, adaptamos o espaço, o cardápio e o conteúdo do dia para receber você com todo o cuidado, incluindo alergias, restrições e necessidades de acessibilidade.</p>
+    <p class="lede">São 6 perguntas rápidas, quase todas de toque, e um espaço para fotos. Com elas, adaptamos o espaço, o cardápio e o conteúdo do dia para receber você com todo o cuidado, incluindo alergias, restrições e necessidades de acessibilidade.</p>
 
     <section class="q">
       <h2>O que você mais espera viver neste dia?</h2>
@@ -125,6 +141,26 @@ h1 em{color:var(--gold-soft)}
       </div>
     </section>
 
+    <section class="photos" id="photos">
+      <h2>Fotos para um <em>momento especial</em> do dia</h2>
+      <p>Estamos preparando uma dinâmica muito especial, e ela fica ainda mais bonita com as suas fotos. Não é obrigatório, mas faz toda a diferença para nós.</p>
+      <p>As fotos serão impressas, então envie na melhor qualidade que conseguir. Cada foto é salva assim que você escolhe, e você pode voltar a este link depois para adicionar mais.</p>
+
+      <div class="ph-group" data-kind="child" data-max="3">
+        <h3>Uma foto sua de criança</h3>
+        <p class="help">Vale foto de foto, tirada com o celular. Até 3.</p>
+        <div class="ph-grid"></div>
+        <p class="ph-err" role="alert"></p>
+      </div>
+
+      <div class="ph-group" data-kind="special" data-max="3">
+        <h3>Pessoas especiais para você</h3>
+        <p class="help">Família, amigas, quem marcou a sua história. Até 3.</p>
+        <div class="ph-grid"></div>
+        <p class="ph-err" role="alert"></p>
+      </div>
+    </section>
+
     <button type="submit" class="submit" id="submit">Enviar</button>
     <p class="error" id="error" role="alert"></p>
   </form>
@@ -133,6 +169,7 @@ h1 em{color:var(--gold-soft)}
     <p class="eyebrow">Tudo pronto</p>
     <h1>Obrigada, <em id="done-name">querida</em>.</h1>
     <p>Suas respostas chegaram para a Nay. Nos vemos no dia 24 de outubro, em Belo Horizonte.</p>
+    <div class="nudge" id="photo-nudge" hidden>Ainda dá tempo de enviar <b style="color:var(--cream)">sua foto de criança</b> e as fotos das pessoas especiais para a dinâmica do dia.<br><button type="button" class="again" id="add-photos">Adicionar fotos</button></div>
     <button type="button" class="again" id="again">Revisar minhas respostas</button>
   </div>
 </main>
@@ -175,6 +212,48 @@ h1 em{color:var(--gold-soft)}
     $('accessibility-note').hidden = !selected('accessibility').includes('Outra');
   }
 
+  // Photos: each file gets a signed upload slot from event-prep, goes
+  // straight to Storage, then is attached to her registration.
+  const photos = { child: [], special: [] };
+  const escHtml = (v) => String(v || '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  function renderPhotos(kind) {
+    const g = document.querySelector(`.ph-group[data-kind="${kind}"]`);
+    const max = Number(g.dataset.max);
+    g.querySelector('.ph-grid').innerHTML = photos[kind].map((p) => `
+      <div class="ph"><span class="ph-fallback">Foto enviada</span>${p.url ? `<img src="${p.url}" alt="" onerror="this.remove()">` : ''}
+        <button type="button" class="rm" data-rm="${escHtml(p.path)}" aria-label="Remover foto">×</button></div>`).join('')
+      + (photos[kind].length < max ? `<label class="add"><span>+</span>Adicionar foto<input type="file" accept="image/*"></label>` : '');
+    g.querySelector('input[type=file]')?.addEventListener('change', (e) => { const f = e.target.files[0]; if (f) upload(kind, f, g); });
+    g.querySelectorAll('[data-rm]').forEach((b) => b.addEventListener('click', () => removePhoto(kind, b.dataset.rm, g)));
+    $('photo-nudge').hidden = photos.child.length > 0;
+  }
+  async function upload(kind, file, g) {
+    const errEl = g.querySelector('.ph-err'); errEl.textContent = '';
+    const add = g.querySelector('.add');
+    const type = file.type || (/\.hei[cf]$/i.test(file.name) ? 'image/heic' : '');
+    if (file.size > 15 * 1024 * 1024) return (errEl.textContent = 'Essa foto passa de 15 MB. Tente uma versão menor.');
+    add.classList.add('busy'); add.firstChild.textContent = '…';
+    try {
+      const slot = await call({ action: 'photo_upload_url', kind, content_type: type });
+      if (!slot.ok || slot.d.error) throw new Error(slot.d.error);
+      const fd = new FormData(); fd.append('cacheControl', '3600'); fd.append('', file);
+      const up = await fetch(slot.d.signed_url, { method: 'PUT', body: fd, headers: { 'x-upsert': 'false' } });
+      if (!up.ok) throw new Error('Não foi possível enviar a foto. Tente de novo.');
+      const saved = await call({ action: 'photo_add', kind, path: slot.d.path });
+      if (!saved.ok || saved.d.error) throw new Error(saved.d.error);
+      photos[kind] = saved.d.photos;
+      renderPhotos(kind);
+    } catch (x) {
+      errEl.textContent = x.message || 'Não foi possível enviar a foto. Tente de novo.';
+      renderPhotos(kind);
+    }
+  }
+  async function removePhoto(kind, path, g) {
+    const res = await call({ action: 'photo_remove', kind, path });
+    if (!res.ok || res.d.error) { g.querySelector('.ph-err').textContent = res.d.error || 'Não foi possível remover.'; return; }
+    photos[kind] = res.d.photos; renderPhotos(kind);
+  }
+
   function show(id) { ['loading', 'invalid', 'prep', 'done'].forEach((x) => { $(x).hidden = x !== id; }); window.scrollTo(0, 0); }
 
   async function load() {
@@ -191,12 +270,15 @@ h1 em{color:var(--gold-soft)}
       $('allergy-note').value = a.allergies;
       press('accessibility', a.accessibility || []); $('accessibility-note').value = a.accessibility_note || '';
       press('revenue_current', [a.revenue_current]); press('revenue_goal', [a.revenue_goal]);
+      photos.child = a.child_photos || []; photos.special = a.special_photos || [];
+      renderPhotos('child'); renderPhotos('special');
       sync();
       show(d.submitted ? 'done' : 'prep');
     } catch { show('invalid'); }
   }
 
   $('again').addEventListener('click', () => show('prep'));
+  $('add-photos').addEventListener('click', () => { show('prep'); $('photos').scrollIntoView({ behavior: 'smooth' }); });
   $('prep').addEventListener('submit', async (e) => {
     e.preventDefault();
     const err = $('error'); err.textContent = '';
