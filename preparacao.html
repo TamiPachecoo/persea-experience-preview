@@ -47,6 +47,11 @@ h1 em{color:var(--gold-soft)}
 .add input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
 .add.busy{opacity:.6;pointer-events:none}
 .ph-err{color:#e59a86;font-size:11px;margin:8px 0 0;min-height:1em}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}@media(max-width:520px){.grid2{grid-template-columns:1fr}}
+.lbl{display:block;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-top:22px}
+.lbl .opt{color:var(--muted);letter-spacing:.06em;text-transform:none;font-weight:400}
+.lbl+.field{margin-top:8px}
+.step{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);text-align:center;margin:0 0 10px}
 .nudge{margin:26px auto 0;max-width:420px;padding:16px;text-align:center;border:1px solid var(--line);border-radius:6px;font-size:13px;color:var(--muted)}
 </style></head><body>
 <main class="wrap">
@@ -58,9 +63,34 @@ h1 em{color:var(--gold-soft)}
     <p class="lede">Este link de preparação não foi encontrado. Fale com a minha equipe pelo WhatsApp para receber o seu.</p>
   </div>
 
+  <form id="signup" hidden novalidate>
+    <p class="eyebrow">PERSEA Experience · 24 de outubro</p>
+    <h1>Que bom ter você, <em>vamos preparar o seu dia.</em></h1>
+    <p class="lede">Primeiro, me conte quem é você. Depois vêm algumas perguntas rápidas para eu receber você com todo o cuidado no dia, incluindo alergias, restrições e acessibilidade.</p>
+    <p class="step">Etapa 1 de 2 · Seus dados</p>
+    <label class="lbl" for="s-name">Nome completo</label>
+    <input class="field" id="s-name" autocomplete="name" maxlength="120" required>
+    <div class="grid2">
+      <div><label class="lbl" for="s-email">E-mail</label>
+        <input class="field" id="s-email" type="email" autocomplete="email" inputmode="email" maxlength="200" required></div>
+      <div><label class="lbl" for="s-whatsapp">WhatsApp com DDD</label>
+        <input class="field" id="s-whatsapp" type="tel" autocomplete="tel" inputmode="tel" maxlength="40" placeholder="(31) 99999-9999" required></div>
+      <div><label class="lbl" for="s-instagram">Instagram</label>
+        <input class="field" id="s-instagram" autocapitalize="none" maxlength="100" placeholder="@seuperfil"></div>
+      <div><label class="lbl" for="s-linkedin">LinkedIn <span class="opt">(se tiver)</span></label>
+        <input class="field" id="s-linkedin" autocapitalize="none" maxlength="200" placeholder="linkedin.com/in/..."></div>
+      <div><label class="lbl" for="s-age">Idade <span class="opt">(opcional)</span></label>
+        <input class="field" id="s-age" type="number" inputmode="numeric" min="14" max="110"></div>
+    </div>
+    <p class="note" style="text-align:left">Instagram ou LinkedIn: preencha pelo menos um.</p>
+    <button type="submit" class="submit" id="s-submit">Continuar</button>
+    <p class="error" id="s-error" role="alert"></p>
+  </form>
+
   <form id="prep" hidden novalidate>
     <p class="eyebrow">PERSEA Experience · 24 de outubro</p>
     <h1><span id="hello">Que bom ter você</span>, <em>vamos preparar o seu dia.</em></h1>
+    <p class="step" id="step2" hidden>Etapa 2 de 2 · Preparação</p>
     <p class="lede">São 6 perguntas rápidas, quase todas de toque, e um espaço para fotos. Com elas, adaptamos o espaço, o cardápio e o conteúdo do dia para receber você com todo o cuidado, incluindo alergias, restrições e necessidades de acessibilidade.</p>
 
     <section class="q">
@@ -183,7 +213,9 @@ h1 em{color:var(--gold-soft)}
 (function () {
   const ENDPOINT = 'https://bletlyuptkppacjcbcvw.supabase.co/functions/v1/event-prep';
   const KEY = 'sb_publishable_37D7JJzhUDCUwtHtYA4gjw_jiSXDMxu';
-  const token = new URLSearchParams(location.search).get('t') || '';
+  const params = new URLSearchParams(location.search);
+  let token = params.get('t') || '';
+  const signupCode = params.get('c') || '';
   const $ = (id) => document.getElementById(id);
   const call = (body) => fetch(ENDPOINT, {
     method: 'POST', headers: { 'Content-Type': 'application/json', apikey: KEY },
@@ -258,7 +290,7 @@ h1 em{color:var(--gold-soft)}
     photos[kind] = res.d.photos; renderPhotos(kind);
   }
 
-  function show(id) { ['loading', 'invalid', 'prep', 'done'].forEach((x) => { $(x).hidden = x !== id; }); window.scrollTo(0, 0); }
+  function show(id) { ['loading', 'invalid', 'signup', 'prep', 'done'].forEach((x) => { $(x).hidden = x !== id; }); window.scrollTo(0, 0); }
 
   async function load() {
     if (!/^[0-9a-f-]{36}$/i.test(token)) return show('invalid');
@@ -317,7 +349,40 @@ h1 em{color:var(--gold-soft)}
     } finally { btn.disabled = false; btn.textContent = 'Enviar'; }
   });
 
-  load();
+  // Direct sign-up link (?c=<code>), for people who registered outside the
+  // event page: her details create the registration, then the same form
+  // continues on its own ?t= link (so a refresh or a later visit resumes it).
+  async function startSignup() {
+    try {
+      const { ok } = await call({ action: 'signup_check', code: signupCode });
+      show(ok ? 'signup' : 'invalid');
+    } catch { show('invalid'); }
+  }
+  $('signup').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const err = $('s-error'); err.textContent = '';
+    const person = {
+      name: $('s-name').value.trim(), email: $('s-email').value.trim(), whatsapp: $('s-whatsapp').value.trim(),
+      instagram: $('s-instagram').value.trim(), linkedin: $('s-linkedin').value.trim(), age: $('s-age').value.trim(),
+    };
+    if (person.name.split(/\s+/).length < 2) return (err.textContent = 'Escreva seu nome completo.');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(person.email)) return (err.textContent = 'Confira o seu e-mail.');
+    if (person.whatsapp.replace(/\D/g, '').length < 10) return (err.textContent = 'Confira o seu WhatsApp com DDD.');
+    if (!person.instagram && !person.linkedin) return (err.textContent = 'Informe seu Instagram ou LinkedIn.');
+    const btn = $('s-submit'); btn.disabled = true; btn.textContent = 'Salvando…';
+    try {
+      const { ok, d } = await call({ action: 'signup', code: signupCode, person });
+      if (!ok || d.error) throw new Error(d.error);
+      token = d.token;
+      $('step2').hidden = false;
+      history.replaceState(null, '', `${location.pathname}?t=${token}`);
+      await load();
+    } catch (x) {
+      err.textContent = x.message || 'Não foi possível salvar agora. Tente de novo em instantes.';
+    } finally { btn.disabled = false; btn.textContent = 'Continuar'; }
+  });
+
+  if (signupCode && !token) startSignup(); else load();
 })();
 </script>
 </body></html>
